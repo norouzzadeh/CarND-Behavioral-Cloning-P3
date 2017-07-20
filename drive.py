@@ -3,7 +3,7 @@ import base64
 from datetime import datetime
 import os
 import shutil
-
+import matplotlib.pyplot as plt
 import numpy as np
 import socketio
 import eventlet
@@ -44,7 +44,7 @@ class SimplePIController:
 
 
 controller = SimplePIController(0.1, 0.002)
-set_speed = 9
+set_speed = 60
 controller.set_desired(set_speed)
 
 
@@ -62,7 +62,11 @@ def telemetry(sid, data):
         image = Image.open(BytesIO(base64.b64decode(imgString)))
         image_array = np.asarray(image)
         steering_angle = float(model.predict(image_array[None, :, :, :], batch_size=1))
-
+        # print( np.shape( image_array ) )
+        # print( image_array[0,0] )
+        # print( image_array[0,0] )
+        # plt.imshow( image_array )
+        # plt.show()
         throttle = controller.update(float(speed))
 
         print(steering_angle, throttle)
